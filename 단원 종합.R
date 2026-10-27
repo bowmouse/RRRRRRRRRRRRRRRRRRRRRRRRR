@@ -77,3 +77,8 @@ airq %>%summarise(mean_Wind = mean(Wind, na.rm = T)) #3.
 
 #7.1 low-level 그래프$ggplot2
 #pie(), barplot()...
+company <- c("A사", "B사", "C사")
+sales <- c(30, 55, 40)
+df <- data.frame(company, sales)
+df
+pie(df$sales, labels = df$company, col = c("red", "blue", "green"), main = "회사별 판매량", clockwise = T)
