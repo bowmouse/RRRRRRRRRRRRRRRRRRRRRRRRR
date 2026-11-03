@@ -82,3 +82,42 @@ sales <- c(30, 55, 40)
 df <- data.frame(company, sales)
 df
 pie(df$sales, labels = df$company, col = c("red", "blue", "green"), main = "회사별 판매량", clockwise = T)
+#ggplot2 패키지의 ggplot()
+library(ggplot2)
+library(dplyr)
+#geom_col() : 막대그래프
+
+View(Titanic)
+str(Titanic)
+df <- as.data.frame(Titanic)
+str(df)
+#타이타닉 선실별 생존자 합계
+df_sur <- df%>%filter(Survived == "Yes")%>%group_by(Class) %>% summarise(sum = sum(Freq))
+df_sur
+pie(df_sur$sum, labels = df_sur$Class, col = c("blue", "green", "yellow", "red"), main = "Titanic Survivor", init.angle = 90)
+#선실별 사망자 합계표, 파이 차트
+df_die <- df%>%filter(Survived == "No")%>%group_by(Class) %>% summarise(sum = sum(Freq))
+df_die
+pie(df_die$sum, labels = df_die$Class, col = c("blue", "green", "yellow", "red"), main = "Titanic ghost", init.angle = 90)
+#geom_col() : 막대그래프
+#타이타닉 선실별 생존자 그래프(생존자통계 : df_sur)
+ggplot(data = df_sur, aes(x = Class, y = sum, fill = Class)) + geom_col()
+
+#geom_bar() : 빈도막대그래프
+View(diamonds)
+#다이아몬드 연마등급에 따른 빈도 막대그래프
+ggplot(diamonds, aes(x = cut, fill = cut)) + geom_bar()
+#geom_histogram() : 히스토그램
+#다이아몬드 무게(carat)에 다한 구간별 히스토그램
+ggplot(diamonds, aes(x = carat)) + geom_histogram(fill = "steelblue", color = "white", binwidth = 0.1) + xlim(0, 3)
+#geom_line() : 선그래프
+#다이아몬드 무게별 개수
+dia_count <- diamonds %>% group_by(carat) %>% summarise(num = n())
+dia_count
+ggplot(dia_count, aes(x = carat, y = num)) + geom_line() + xlim(0, 3)
+#geom_point() : 점그래프
+View(iris)
+#붓꽃의 꽃받침 길이에 따른 꽃받침 너비 분포
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) + geom_point()
+#geom_boxplot() : 상자그림그래프
+ggplot(iris, aes(x = Species, y = Sepal.Width, color = Species)) + geom_boxplot()
